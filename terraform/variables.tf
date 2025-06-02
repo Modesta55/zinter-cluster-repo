@@ -49,3 +49,13 @@ variable "resource_group_name" {
   description = "The name of the resource group where resources will be deployed"
   type        = string
 }
+
+variable "aad_admin_group_object_id" {
+  description = "Azure AD group object ID for AKS Admins"
+  type        = string
+}
+
+variable "tenant_id" {
+  description = "Azure AD tenant ID"
+  type        = string
+}

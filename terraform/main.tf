@@ -55,6 +55,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   role_based_access_control_enabled = true
+
+  azure_active_directory_role_based_access_control {
+    admin_group_object_ids = [var.aad_admin_group_object_id]  # Add this variable in your variables.tf or define inline
+    tenant_id             = var.tenant_id                   # Add this variable as well
+  }
+
   local_account_disabled            = true
 
   oidc_issuer_enabled       = true
