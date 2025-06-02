@@ -44,3 +44,8 @@ variable "aks_max_node_count" {
   description = "Maximum nodes in autoscaler node pool"
   type        = number
 }
+
+variable "resource_group_name" {
+  description = "The name of the resource group where resources will be deployed"
+  type        = string
+}
