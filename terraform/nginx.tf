@@ -10,8 +10,16 @@ resource "helm_release" "nginx_ingress" {
     <<EOF
 controller:
   replicaCount: 2
+  nodeSelector:
+    "kubernetes.io/os": linux
   service:
     type: LoadBalancer
+  admissionWebhooks:
+    enabled: true
 EOF
+  ]
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
   ]
 }

@@ -10,7 +10,6 @@ resource "azurerm_virtual_network" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
-# Subnet for system/default node pool
 resource "azurerm_subnet" "aks_system" {
   name                 = "${var.prefix}-subnet-system"
   resource_group_name  = azurerm_resource_group.main.name
@@ -18,7 +17,6 @@ resource "azurerm_subnet" "aks_system" {
   address_prefixes     = [var.subnet_system_address_prefix]
 }
 
-# Subnet for autoscaler/user workloads node pool
 resource "azurerm_subnet" "aks_workload" {
   name                 = "${var.prefix}-subnet-workload"
   resource_group_name  = azurerm_resource_group.main.name
@@ -35,10 +33,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name           = "default"
     vm_size        = var.aks_node_vm_size
-    node_count     = 1                           # ✅ REQUIRED to fix 400 error
+    node_count     = 1
     vnet_subnet_id = azurerm_subnet.aks_system.id
     type           = "VirtualMachineScaleSets"
-
     node_labels = {
       role = "system"
     }
@@ -57,14 +54,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   role_based_access_control_enabled = true
 
   azure_active_directory_role_based_access_control {
-    admin_group_object_ids = [var.aad_admin_group_object_id]  # Add this variable in your variables.tf or define inline
-    tenant_id             = var.tenant_id                   # Add this variable as well
+    admin_group_object_ids = [var.aad_admin_group_object_id]
+    tenant_id              = var.tenant_id
   }
 
-  local_account_disabled            = true
-
-  oidc_issuer_enabled       = true
-  workload_identity_enabled = true
+  local_account_disabled     = true
+  oidc_issuer_enabled        = true
+  workload_identity_enabled  = true
 
   tags = {
     Environment = "Production"

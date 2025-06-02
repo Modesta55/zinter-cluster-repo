@@ -7,8 +7,12 @@ on:
 
 jobs:
   terraform:
-    name: 'Terraform Apply'
+    name: Terraform Apply
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform  # Set working dir globally
 
     steps:
       - name: Checkout Code
@@ -20,10 +24,10 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Init
-        run: terraform -chdir=terraform init
+        run: terraform init
 
       - name: Terraform Plan
-        run: terraform -chdir=terraform plan
+        run: terraform plan
 
       - name: Terraform Apply
-        run: terraform -chdir=terraform apply -auto-approve
+        run: terraform apply -auto-approve
