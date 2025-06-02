@@ -35,14 +35,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name           = "default"
     vm_size        = var.aks_node_vm_size
+    node_count     = 1                           # ✅ REQUIRED to fix 400 error
     vnet_subnet_id = azurerm_subnet.aks_system.id
     type           = "VirtualMachineScaleSets"
 
     node_labels = {
       role = "system"
     }
-
-    # node_count removed because autoscaling manages scaling
   }
 
   identity {
