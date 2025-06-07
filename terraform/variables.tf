@@ -63,6 +63,8 @@ variable "tenant_id" {
   type        = string
 }
 
+
+
 # ✅ Optional: Customize static public IP name
 variable "nginx_static_ip_name" {
   description = "Name for the static public IP used by NGINX ingress"
