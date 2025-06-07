@@ -94,3 +94,18 @@ resource "azurerm_kubernetes_cluster_node_pool" "autoscaler" {
     NodeType    = "autoscaler"
   }
 }
+
+# ✅ Static Public IP for NGINX Ingress
+resource "azurerm_public_ip" "nginx_ingress" {
+  name                = "${var.prefix}-nginx-ip"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.main.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+# ✅ Output the Static IP
+output "nginx_ingress_static_ip" {
+  description = "Static public IP address for NGINX Ingress controller"
+  value       = azurerm_public_ip.nginx_ingress.ip_address
+}
