@@ -1,4 +1,4 @@
-name: Destroy AKS Cluster
+name: Deploy AKS Cluster
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Destroy AKS Cluster
+    name: Terraform Apply AKS Cluster
     runs-on: ubuntu-latest
 
     defaults:
@@ -26,8 +26,24 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Plan (Destroy)
-        run: terraform plan -destroy
+      - name: Terraform Plan
+        run: terraform plan
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Apply (Manual Approval)
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        run: terraform apply -auto-approve
+
+      # Optional: add a step to verify cluster readiness or wait before next job
+      # - name: Wait for AKS cluster readiness
+      #   run: |
+      #     # Add a script here to poll kube-api or just wait a few minutes
+
+  # Separate job or separate workflow for Helm and Kubernetes manifests deployment:
+  # This job runs after AKS is ready
+  # helm_deploy:
+  #   needs: terraform
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - Checkout Code
+  #     - Setup Kubectl and Helm (using azure/login or kubectl/helm setup actions)
+  #     - Deploy Helm charts for ingress, cert-manager, etc.
