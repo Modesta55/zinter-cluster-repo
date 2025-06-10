@@ -7,12 +7,12 @@ on:
 
 jobs:
   terraform:
-    name: Terraform plan AKS Cluster
+    name: Plan and Apply AKS Cluster via Terraform Cloud
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: terraform  # adjust if needed
+        working-directory: terraform  # change if your .tf files are in another folder
 
     steps:
       - name: Checkout Code
@@ -26,10 +26,11 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Plan (Apply)
-        run: terraform plan -apply
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
-      # - name: Terraform Destroy
-      #   run: terraform destroy -auto-approve
+        run: terraform apply -auto-approve tfplan
