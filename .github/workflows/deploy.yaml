@@ -1,18 +1,25 @@
-name: Deploy AKS Cluster
+name: Deploy or Destroy AKS Cluster
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
 
 jobs:
   terraform:
-    name: Plan and Apply AKS Cluster via Terraform Cloud
+    name: Apply or Destroy AKS via Terraform Cloud
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: terraform  # change if your .tf files are in another folder
+        working-directory: terraform  # Adjust if .tf files are in another folder
 
     steps:
       - name: Checkout Code
@@ -30,7 +37,12 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: |
+          if [[ "${{ github.event.inputs.action }}" == "apply" ]]; then
+            terraform plan -out=tfplan
+          else
+            terraform plan -destroy -out=tfplan
+          fi
 
-      - name: Terraform Apply
+      - name: Terraform Apply or Destroy
         run: terraform apply -auto-approve tfplan
