@@ -32,17 +32,17 @@ jobs:
       # ---------- APPLY MODE ----------
       # Uncomment these 2 blocks when you want to create/update the AKS cluster
 
-      # - name: Terraform Plan (Apply)
-      #   run: terraform plan -out=tfplan
+      - name: Terraform Plan (Apply)
+        run: terraform plan -out=tfplan
 
-      # - name: Terraform Apply
-      #   run: terraform apply -auto-approve tfplan
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
 
       # ---------- DESTROY MODE ----------
       # Uncomment these 2 blocks when you want to destroy the AKS cluster
 
-      - name: Terraform Plan (Destroy)
-        run: terraform plan -destroy -out=tfplan
+      # - name: Terraform Plan (Destroy)
+      #   run: terraform plan -destroy -out=tfplan
 
-      - name: Terraform Destroy
-        run: terraform apply -auto-approve tfplan
+      # - name: Terraform Destroy
+      #   run: terraform apply -auto-approve tfplan
